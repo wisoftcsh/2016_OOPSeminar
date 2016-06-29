@@ -5,17 +5,21 @@ import java.io.*;
 
 public class Candidate {
     String name;
-    int caseNum;
     int candidateNum;
     int n;
+    int target = 0;
+    int result;
     String line;
     ArrayList<String> information = new ArrayList<>();
     ArrayList<ArrayList> candidateName = null;
     ArrayList<Integer> votingNum = null;
     ArrayList<Integer> index = null;
+    FileWriter fw = null;
+    File file = null;
+    File fileWrite = new File("E:\\Development\\java\\OOPSeminar_2016\\src\\chap01\\australian_voting\\candidateOutput.txt");
 
     Candidate() {
-        File file = new File("E:\\Development\\java\\OOPSeminar_2016\\src\\chap01\\australian_voting\\candidateInput.txt");
+        file = new File("E:\\Development\\java\\OOPSeminar_2016\\src\\chap01\\australian_voting\\candidateInput.txt");
         Scanner fs = null;
         try {
             fs = new Scanner(new FileReader(file));
@@ -28,7 +32,6 @@ public class Candidate {
         } catch (IOException e) {
             System.out.println("입출력 오류입니다.");
         } finally {
-            caseNumSet();
             fs.close();
         }
     }
@@ -43,8 +46,18 @@ public class Candidate {
         System.out.println();
     }
 
-    public void caseNumSet() {
-        caseNum = Integer.parseInt(information.get(0));
+    public void outPut(String string) {
+        try {
+            String c = "당선 : " + string +"\r\n";
+            fw = new FileWriter(fileWrite,true);
+            fw.write(c);
+            fw.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("파일을 찾을 수 없습니다.");
+        } catch (IOException e) {
+            System.out.println("입출력 오류입니다.");
+        }
+
     }
 
     public int firstCounting() {
@@ -58,6 +71,12 @@ public class Candidate {
             }
             counting.add(i, String.valueOf(count));
             count = 0;
+        }
+
+        int sum = 0;
+        Iterator<String> itsum = counting.iterator();
+        while (itsum.hasNext()) {
+            sum += Integer.parseInt(itsum.next());
         }
         String max = counting.get(0);
         index = new ArrayList<>();
@@ -74,37 +93,43 @@ public class Candidate {
                     }
                 }
             }
+            if(index.size()!=0) {
+                String candidateNameString;
+                Iterator<Integer> its = index.iterator();
+                while (its.hasNext()) {
+                    candidateNameString = information.get(its.next() + candidateNum);
+                    outPut(candidateNameString);
+                    System.out.println(candidateNameString);
+                }
+                index.clear();
+                return -1;
+            }
         }
-        Iterator<String> it = counting.iterator();
-        while(it.hasNext()){
-            System.out.println(it.next());
-        }
-        int idx = 0;
+        if ((Double.parseDouble(max) / sum) * 100 >= 50) {
+            int idx = 0;
+            int tmp = counting.indexOf(max);
+            if (tmp != -1 && index.size() == 0) {
+                idx = tmp;
+                index.clear();
+                return idx;
+            }
+        }else{
 
-        int tmp = counting.indexOf(max);
-        if (tmp != -1 && index.size()==0) {
-            idx = tmp;
-            index.clear();
-            return idx;
         }
-        Iterator<Integer> its = index.iterator();
-        while (it.hasNext()) {
-            System.out.print(information.get(its.next() + candidateNum));
-        }
-        System.out.println();
-        index.clear();
-        return -1;
+        return -2;
     }
 
     public void voting() {
-        int target = 0;
         int split = 0;
         int loop = 0;
+        fileWrite.delete();
+        fileWrite = new File("E:\\Development\\java\\OOPSeminar_2016\\src\\chap01\\australian_voting\\candidateOutput.txt");
         while (true) {
             if (loop == information.size()) {
                 loop = 0;
                 return;
             }
+
             if (information.get(loop).length() == 0 && information.get(loop + 1).length() == 0) {
                 System.out.println("다른 케이스 발견");
                 System.out.println();
@@ -124,15 +149,17 @@ public class Candidate {
                         candidateName.get(c).add((tmp[c]));
                     }
                 }
-                int result = firstCounting();
+                result = firstCounting();
                 if (result == -1) {
                     candidateName.clear();
                     votingNum.clear();
-                } else {
-                    System.out.print("당선 : ");
-                    System.out.println(information.get(result + target + 1));
+                } else if(result != -1 && result != -2) {
+                    outPut(information.get(result + target + 1));
+                    System.out.println("당선 : "+information.get(result + target + 1));
                     candidateName.clear();
                     votingNum.clear();
+                } else if(result ==-2){
+                    System.out.println("판별 실패");
                 }
                 System.out.println("투표 마감");
                 System.out.println();
