@@ -10,12 +10,18 @@ public class Candidate {
     int target = 0;
     int result;
     String line;
+
     ArrayList<String> information = new ArrayList<>();
     ArrayList<ArrayList> candidateName = null;
     ArrayList<Integer> votingNum = null;
     ArrayList<Integer> index = null;
     ArrayList<Integer> sindex = null;
+    ArrayList<Integer> minIndex = null;
     ArrayList<String> counting = null;
+    ArrayList<Integer> prefer = null;
+    ArrayList<ArrayList> compArray = null;
+    ArrayList<Integer> compares = null;
+    ArrayList<Integer> init = null;
     FileWriter fw = null;
     File file = null;
     File fileWrite = new File("E:\\Development\\java\\OOPSeminar_2016\\src\\chap01\\australian_voting\\candidateOutput.txt");
@@ -80,23 +86,23 @@ public class Candidate {
         while (itsum.hasNext()) {
             sum += Integer.parseInt(itsum.next());
         }
-        String max = counting.get(0);
+        String max = Collections.max(counting);
         index = new ArrayList<>();
-
-        for (int k = 1; k < counting.size(); k++) {
-            if (max.compareTo(counting.get(k)) < 0) {
-                max = counting.get(k);
-            } else if (max.compareTo(counting.get(k)) > 0) {
-                continue;
-            } else if (max.compareTo(counting.get(k)) == 0) {
-                System.out.println("첫 투표 결과 동률입니다.");
-                for (int i = 0; i < counting.size(); i++) {
-                    if (max.equals(counting.get(i))) {
-                        index.add(i);
-                    }
+        int maxCount = 0;
+        for (int k = 0; k < counting.size(); k++) {
+            if (max.compareTo(counting.get(k)) == 0) {
+                maxCount++;
+            }
+        }
+        if (maxCount != 1) {
+            System.out.println("첫 투표 결과 동률입니다.");
+            for (int i = 0; i < counting.size(); i++) {
+                if (max.equals(counting.get(i))) {
+                    index.add(i);
                 }
             }
         }
+
         if ((Double.parseDouble(max) / sum) * 100 >= 50) {
             if (index.size() != 0) {
                 String candidateNameString;
@@ -122,34 +128,92 @@ public class Candidate {
     }
 
     public int secondVoing() {
-        String min = counting.get(0);
-        for (int k = 1; k < counting.size(); k++) {
-            if (min.compareTo(counting.get(k)) < 0) {
-                continue;
-            } else if (min.compareTo(counting.get(k)) > 0) {
-                min = counting.get(k);
-            } else if (min.compareTo(counting.get(k)) == 0) {
-                sindex = new ArrayList<>();
-                for (int i = 0; i < counting.size(); i++) {
-                    if (min.equals(counting.get(i))) {
-                        sindex.add(i);
+        System.out.println("두번째 투표 시작");
+        String min = Collections.min(counting);
+        sindex = new ArrayList<>();
+        int minCount = 0;
+        for (int k = 0; k < counting.size(); k++) {
+            if (min.compareTo(counting.get(k)) == 0) {
+                minCount++;
+            }
+        }
+        if (minCount != 1) {
+            for (int i = 0; i < counting.size(); i++) {
+                if (min.equals(counting.get(i))) {
+                    sindex.add(i);
+                }
+            }
+        }
+        if (counting.size() - sindex.size() == 1) {
+            for (int i = 0; i < counting.size(); i++) {
+                if (!(counting.get(i).equals(min))) {
+                    counting.clear();
+                    return i + 999;
+                }
+            }
+        }
+        minIndex = new ArrayList<>();
+        for (int i = 0; i < counting.size(); i++) {
+            if (counting.get(i).equals(min)) {
+                minIndex.add(i);
+            }
+        }
+        for (int j = 0; j < minIndex.size(); j++) {
+            int temp = minIndex.get(j);
+            candidateName.get(temp).add(0, "탈락");
+        }
+        int pre = preference();
+        if (pre == -1) {
+
+        }
+        counting.clear();
+        compArray.clear();
+        return -5;
+    }
+
+    public int preference() {
+        prefer = new ArrayList<>();
+        int oneNum = 0;
+        for (int i = 0; i < candidateName.size(); i++) {
+            if (candidateName.get(i).indexOf("탈락") != 0) {
+                prefer.add(i);
+            } else if (candidateName.get(i).indexOf("탈락") == 0) {
+                for (int j = 0; j < candidateName.get(i).size(); j++) {
+                    if (candidateName.get(i).get(j).equals("1")) {
+                        oneNum++;
                     }
                 }
             }
         }
-        int minInt = Integer.parseInt(min);
-        if(counting.size()-sindex.size() == 1){
-            System.out.println(counting);
-            System.out.println(sindex);
-            for(int i =0;i<counting.size();i++){
-                if(!(counting.get(i).equals(min))){
-                    counting.clear();
-                    return i+999;
+
+        compArray = new ArrayList<>();
+        for (int i = 0; i < candidateNum; i++) {
+            init = new ArrayList<>();
+            compArray.add(init);
+        }
+        int compCount = 0;
+        for (int j = 0; j < prefer.size(); j++) {
+            compares = new ArrayList<>();
+            for (int comp = 0; comp <= candidateNum; comp++) {
+                for (int i = 0; i < votingNum.size(); i++) {
+                    if (candidateName.get(prefer.get(j)).get(i).equals(String.valueOf(comp))) {
+                        compCount++;
+                    }
                 }
+                compares.add(compCount);
+                compCount = 0;
+            }
+            compArray.set(prefer.get(j),compares);
+        }
+        System.out.println(compArray);
+        for (int pro = 0; pro < compArray.size(); pro++) {
+            for (int k = 2; k < compArray.get(pro).size(); k++) {
+
+
+
             }
         }
-        counting.clear();
-        return -5;
+        return -1;
     }
 
     public void voting() {
@@ -193,8 +257,8 @@ public class Candidate {
                     votingNum.clear();
                 } else if (result == -2) {
                     int secondResult = secondVoing();
-                    if(secondResult>=999){
-                        int realI = secondResult-999;
+                    if (secondResult >= 999) {
+                        int realI = secondResult - 999;
                         outPut(information.get(realI + target + 1));
                         System.out.println("당선 : " + information.get(realI + target + 1));
                         candidateName.clear();
@@ -202,7 +266,7 @@ public class Candidate {
                     } else if (secondResult == -5) {
                         System.out.println("판별 실패");
                     }
-                }else{
+                } else {
                     System.out.println("판별 실패");
                 }
                 System.out.println("투표 마감");
