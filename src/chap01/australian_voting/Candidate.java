@@ -196,7 +196,6 @@ public class Candidate {
                 }
             }
         }
-
         compArray = new ArrayList<>();
         for (int i = 0; i < candidateNum; i++) {
             init = new ArrayList<>();
@@ -217,7 +216,7 @@ public class Candidate {
             compArray.set(prefer.get(j), compares);
         }
         int priority = 0;
-        int k = 2;
+        int k = 1;
         for (int pro = 0; pro < compArray.size(); pro++) {
             int first = 0;
             int second = 0;
