@@ -106,7 +106,7 @@ public class Candidate {
                 String candidateNameString;
                 Iterator<Integer> its = index.iterator();
                 while (its.hasNext()) {
-                    candidateNameString = information.get(its.next() + candidateNum);
+                    candidateNameString = information.get(its.next() + target+1);
                     outPut(candidateNameString);
                     System.out.println(candidateNameString);
                 }
