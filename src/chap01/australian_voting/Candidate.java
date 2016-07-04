@@ -9,7 +9,12 @@ public class Candidate {
     int n;
     int target = 0;
     int result;
+    int nextResult;
     String line;
+    String min;
+    String max;
+    int oneNum = 0;
+    int sum = 0;
 
     ArrayList<String> information = new ArrayList<>();
     ArrayList<ArrayList> candidateName = null;
@@ -80,13 +85,7 @@ public class Candidate {
             counting.add(i, String.valueOf(count));
             count = 0;
         }
-
-        int sum = 0;
-        Iterator<String> itsum = counting.iterator();
-        while (itsum.hasNext()) {
-            sum += Integer.parseInt(itsum.next());
-        }
-        String max = Collections.max(counting);
+        max = Collections.max(counting);
         index = new ArrayList<>();
         int maxCount = 0;
         for (int k = 0; k < counting.size(); k++) {
@@ -102,7 +101,6 @@ public class Candidate {
                 }
             }
         }
-
         if ((Double.parseDouble(max) / sum) * 100 >= 50) {
             if (index.size() != 0) {
                 String candidateNameString;
@@ -128,8 +126,18 @@ public class Candidate {
     }
 
     public int secondVoing() {
-        System.out.println("두번째 투표 시작");
-        String min = Collections.min(counting);
+        System.out.println("재투표 시작");
+        min = Collections.min(counting);
+        for (int i = 0; i < counting.size(); i++) {
+            if (min.equals("0")) {
+                min = counting.get(i);
+                if (min.compareTo(counting.get(i + 1)) > 0) {
+                    min = counting.get(i+1);
+                } else if (min.compareTo(counting.get(i + 1)) < 0 ||min.compareTo(counting.get(i + 1)) == 0) {
+                    continue;
+                }
+            }
+        }
         sindex = new ArrayList<>();
         int minCount = 0;
         for (int k = 0; k < counting.size(); k++) {
@@ -158,22 +166,24 @@ public class Candidate {
                 minIndex.add(i);
             }
         }
-        for (int j = 0; j < minIndex.size(); j++) {
-            int temp = minIndex.get(j);
-            candidateName.get(temp).add(0, "탈락");
+        for (int i = 0; i < candidateName.size(); i++) {
+            if (candidateName.get(i).indexOf("탈락") != 0) {
+                for (int j = 0; j < minIndex.size(); j++) {
+                    int temp = minIndex.get(j);
+                    candidateName.get(temp).add(0, "탈락");
+                }
+            }
         }
         int pre = preference();
-        if (pre == -1) {
-
+        for (int i = 0; i < oneNum; i++) {
+            candidateName.get(pre).add("1");
         }
-        counting.clear();
-        compArray.clear();
+        oneNum = 0;
         return -5;
     }
 
     public int preference() {
         prefer = new ArrayList<>();
-        int oneNum = 0;
         for (int i = 0; i < candidateName.size(); i++) {
             if (candidateName.get(i).indexOf("탈락") != 0) {
                 prefer.add(i);
@@ -181,6 +191,7 @@ public class Candidate {
                 for (int j = 0; j < candidateName.get(i).size(); j++) {
                     if (candidateName.get(i).get(j).equals("1")) {
                         oneNum++;
+                        candidateName.get(i).set(j, "0");
                     }
                 }
             }
@@ -203,17 +214,32 @@ public class Candidate {
                 compares.add(compCount);
                 compCount = 0;
             }
-            compArray.set(prefer.get(j),compares);
+            compArray.set(prefer.get(j), compares);
         }
-        System.out.println(compArray);
+        int priority = 0;
+        int k = 2;
         for (int pro = 0; pro < compArray.size(); pro++) {
-            for (int k = 2; k < compArray.get(pro).size(); k++) {
-
-
-
+            int first = 0;
+            int second = 0;
+            if (pro + 1 == compArray.size()) {
+                break;
+            }
+            if (compArray.get(pro).size() != 0) {
+                first = (int) compArray.get(pro).get(k);/// 캐스팅 이유 ? Integer형 인데 int 형이 아닌 오브젝트.
+            }
+            if (compArray.get(pro + 1).size() != 0) {
+                second = (int) compArray.get(pro + 1).get(k);
+            }
+            if (first > second) {
+                priority = pro;
+            } else if (first < second) {
+                priority = pro + 1;
+            } else if (first == second) {
+                k++;
+                continue;
             }
         }
-        return -1;
+        return priority;
     }
 
     public void voting() {
@@ -246,6 +272,7 @@ public class Candidate {
                         candidateName.get(c).add((tmp[c]));
                     }
                 }
+                sum = candidateName.get(0).size();
                 result = firstCounting();
                 if (result == -1) {
                     candidateName.clear();
@@ -264,7 +291,22 @@ public class Candidate {
                         candidateName.clear();
                         votingNum.clear();
                     } else if (secondResult == -5) {
-                        System.out.println("판별 실패");
+                        nextResult = firstCounting();
+                        if (nextResult == -2) {
+                            while (((Double.parseDouble(max) / sum) * 100 < 50)) {
+                                secondVoing();
+                                nextResult = firstCounting();
+                                if (nextResult != -2) {
+                                    break;
+                                }
+                            }
+                        }
+                        outPut(information.get(nextResult + target + 1));
+                        System.out.println("당선 : " + information.get(nextResult + target + 1));
+                        candidateName.clear();
+                        votingNum.clear();
+                        counting.clear();
+                        compArray.clear();
                     }
                 } else {
                     System.out.println("판별 실패");
