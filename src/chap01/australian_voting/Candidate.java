@@ -121,6 +121,17 @@ public class Candidate {
                 counting.clear();
                 return idx;
             }
+        } else if (index.size() == candidateNum) {
+            String candidateNameStringAll;
+            Iterator<Integer> itsAll = index.iterator();
+            while (itsAll.hasNext()) {
+                candidateNameStringAll = information.get(itsAll.next() + target+1);
+                outPut(candidateNameStringAll);
+                System.out.println(candidateNameStringAll);
+            }
+            index.clear();
+            counting.clear();
+            return -9;
         }
         return -2;
     }
@@ -132,8 +143,8 @@ public class Candidate {
             if (min.equals("0")) {
                 min = counting.get(i);
                 if (min.compareTo(counting.get(i + 1)) > 0) {
-                    min = counting.get(i+1);
-                } else if (min.compareTo(counting.get(i + 1)) < 0 ||min.compareTo(counting.get(i + 1)) == 0) {
+                    min = counting.get(i + 1);
+                } else if (min.compareTo(counting.get(i + 1)) < 0 || min.compareTo(counting.get(i + 1)) == 0) {
                     continue;
                 }
             }
@@ -170,7 +181,7 @@ public class Candidate {
             if (candidateName.get(i).indexOf("탈락") != 0) {
                 for (int j = 0; j < minIndex.size(); j++) {
                     int temp = minIndex.get(j);
-                    candidateName.get(temp).add(0, "탈락");
+                    candidateName.get(temp).set(0, "탈락");
                 }
             }
         }
@@ -242,7 +253,6 @@ public class Candidate {
     }
 
     public void voting() {
-        int split = 0;
         int loop = 0;
         fileWrite.delete();
         fileWrite = new File("E:\\Development\\java\\OOPSeminar_2016\\src\\chap01\\australian_voting\\candidateOutput.txt");
@@ -273,7 +283,7 @@ public class Candidate {
                 }
                 sum = candidateName.get(0).size();
                 result = firstCounting();
-                if (result == -1) {
+                if (result == -1 || result == -9) {
                     candidateName.clear();
                     votingNum.clear();
                 } else if (result != -1 && result != -2) {
