@@ -1,7 +1,6 @@
 package chap01.yahtzee;
 
 import java.io.*;
-import java.util.*;
 
 public class RandInput {
     int game = 0;

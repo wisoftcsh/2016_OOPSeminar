@@ -3,7 +3,7 @@ package chap01.yahtzee;
 import java.io.*;
 import java.util.*;
 
-public class Yahtzee extends RandInput {
+public class Yahtzee {
     Category category = new Category();
     String line;
     ArrayList<String> yahtzeeArray = new ArrayList<>();
