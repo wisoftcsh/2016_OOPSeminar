@@ -1,8 +1,10 @@
 package chap01.yahtzee;
 
 import java.util.*;
+import java.io.*;
 
 public class Category {
+    String out = "";
     ArrayList<Integer> array = new ArrayList<>();
     ArrayList<Integer> outArray = new ArrayList<>();
     int[] counter = new int[13];
@@ -13,23 +15,48 @@ public class Category {
     int max = 0;
     int minCount = 0;
     int maxCount = 0;
+    FileWriter fw = null;
+    File fileWrite = new File("E:\\Development\\java\\OOPSeminar_2016\\src\\chap01\\yahtzee\\yahtzeeOutput.txt");
 
     Category() {
-        counterInit();
+        arrayInit();
     }
 
     public void playing(String[] arrays) {
         for (int i = 0; i < arrays.length; i++) {
+            if(arrays[i].isEmpty()){
+                continue;
+            }
             array.add(Integer.parseInt(arrays[i]));
         }
+        System.out.println(array);
         algorithm();
         array.clear();
     }
+    public void outPut(String string) {
+        try {
+            String c = string + " ";
+            fw = new FileWriter(fileWrite, true);
+            fw.write(c);
+            fw.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("파일을 찾을 수 없습니다.");
+        } catch (IOException e) {
+            System.out.println("입출력 오류입니다.");
+        }
 
+    }
     public void outArrayPrint(){
+        fileWrite.delete();
+        fileWrite = new File("E:\\Development\\java\\OOPSeminar_2016\\src\\chap01\\yahtzee\\yahtzeeOutput.txt");
         System.out.println("-------------------------------------------------");
         System.out.println(outArray);
         System.out.println("-------------------------------------------------");
+        for(int i=0;i<outArray.size();i++){
+            out = out + outArray.get(i) +" ";
+        }
+        out = out + "\r\n";
+        outPut(out);
     }
     public void countReset() {
         minCount = 0;
@@ -45,8 +72,12 @@ public class Category {
             resultArray.set(i, 0);
         }
     }
-
-    public void counterInit() {
+    public void counterInit(){
+        for (int i = 0; i < counter.length; i++) {
+            counter[i] = 1;
+        }
+    }
+    public void arrayInit() {
         for (int i = 0; i < counter.length; i++) {
             resultArray.add(0);
         }

@@ -3,13 +3,11 @@ package chap01.yahtzee;
 import java.io.*;
 import java.util.*;
 
-public class Yahtzee {
+public class Yahtzee extends RandInput {
     Category category = new Category();
     String line;
     ArrayList<String> yahtzeeArray = new ArrayList<>();
-    FileWriter fw = null;
     File file = null;
-    File fileWrite = new File("E:\\Development\\java\\OOPSeminar_2016\\src\\chap01\\yahtzee\\yahtzeeOutput.txt");
 
     Yahtzee() {
         file = new File("E:\\Development\\java\\OOPSeminar_2016\\src\\chap01\\yahtzee\\yahtzeeInput.txt");
@@ -18,6 +16,9 @@ public class Yahtzee {
             fs = new Scanner(new FileReader(file));
             while (fs.hasNext()) {
                 line = fs.nextLine();
+                if(line.isEmpty()){
+                    break;
+                }
                 yahtzeeArray.add(line);
             }
         } catch (FileNotFoundException e) {
@@ -39,20 +40,6 @@ public class Yahtzee {
         System.out.println();
     }
 
-    public void outPut(String string) {
-        try {
-            String c = string + " ";
-            fw = new FileWriter(fileWrite, true);
-            fw.write(c);
-            fw.close();
-        } catch (FileNotFoundException e) {
-            System.out.println("파일을 찾을 수 없습니다.");
-        } catch (IOException e) {
-            System.out.println("입출력 오류입니다.");
-        }
-
-    }
-
     public void start() {
         int loop = 0;
         while (true) {
@@ -66,6 +53,7 @@ public class Yahtzee {
                     }
                     System.out.println("게임 시작");
                     category.outArrayClear();
+                    category.counterInit();
                 }
                 String[] temp = yahtzeeArray.get(i).split(" ");
                 category.playing(temp);
