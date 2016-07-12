@@ -1,4 +1,4 @@
-package chap01.australian_voting;
+package chap01.australianvoting;
 
 public class AustralianVotingEx {
     public static void main(String[] args) {

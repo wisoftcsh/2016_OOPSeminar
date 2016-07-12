@@ -136,6 +136,12 @@ public class Category {
             outArray.set(maxIndex, max);
             counter[maxIndex] = 0;
         }
+        System.out.println(resultArray);
+        for(int i=0; i<counter.length;i++){
+            System.out.print(counter[i] + " ");
+        }
+        System.out.println();
+
         resultArrayClear();
     }
 

@@ -1,4 +1,4 @@
-package chap01.australian_voting;
+package chap01.australianvoting;
 
 import java.util.*;
 import java.io.*;
@@ -29,10 +29,10 @@ public class Candidate {
     ArrayList<Integer> init = null;
     FileWriter fw = null;
     File file = null;
-    File fileWrite = new File("E:\\Development\\java\\OOPSeminar_2016\\src\\chap01\\australian_voting\\candidateOutput.txt");
+    File fileWrite = new File("E:\\Development\\java\\OOPSeminar_2016\\src\\chap01\\australianvoting\\candidateOutput.txt");
 
     Candidate() {
-        file = new File("E:\\Development\\java\\OOPSeminar_2016\\src\\chap01\\australian_voting\\candidateInput.txt");
+        file = new File("E:\\Development\\java\\OOPSeminar_2016\\src\\chap01\\australianvoting\\candidateInput.txt");
         Scanner fs = null;
         try {
             fs = new Scanner(new FileReader(file));
@@ -255,7 +255,7 @@ public class Candidate {
     public void voting() {
         int loop = 0;
         fileWrite.delete();
-        fileWrite = new File("E:\\Development\\java\\OOPSeminar_2016\\src\\chap01\\australian_voting\\candidateOutput.txt");
+        fileWrite = new File("E:\\Development\\java\\OOPSeminar_2016\\src\\chap01\\australianvoting\\candidateOutput.txt");
         while (true) {
             if (loop == information.size()) {
                 loop = 0;
@@ -303,9 +303,9 @@ public class Candidate {
                         nextResult = firstCounting();
                         if (nextResult == -2) {
                             while (((Double.parseDouble(max) / sum) * 100 < 50)) {
-                                secondVoing();
-                                nextResult = firstCounting();
-                                if (nextResult != -2) {
+                                    secondVoing();
+                                    nextResult = firstCounting();
+                                    if (nextResult != -2) {
                                     break;
                                 }
                             }
