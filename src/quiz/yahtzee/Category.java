@@ -1,4 +1,4 @@
-package chap01.yahtzee;
+package quiz.yahtzee;
 
 import java.util.*;
 import java.io.*;
@@ -7,6 +7,9 @@ public class Category {
     String out = "";
     ArrayList<Integer> array = new ArrayList<>();
     ArrayList<Integer> outArray = new ArrayList<>();
+    ArrayList<ArrayList> totalArray = new ArrayList<>();
+    ArrayList<Integer> scoreArray = new ArrayList<>();
+    ArrayList<Integer> tmpArray = null;
     int[] counter = new int[13];
     ArrayList<Integer> resultArray = new ArrayList<>();
     int count = 0;
@@ -16,7 +19,7 @@ public class Category {
     int minCount = 0;
     int maxCount = 0;
     FileWriter fw = null;
-    File fileWrite = new File("E:\\Development\\java\\OOPSeminar_2016\\src\\chap01\\yahtzee\\yahtzeeOutput.txt");
+    File fileWrite = new File("E:\\Development\\java\\OOPSeminar_2016\\src\\quiz\\yahtzee\\yahtzeeOutput.txt");
 
     Category() {
         arrayInit();
@@ -24,7 +27,7 @@ public class Category {
 
     public void playing(String[] arrays) {
         for (int i = 0; i < arrays.length; i++) {
-            if(arrays[i].isEmpty()){
+            if (arrays[i].isEmpty()) {
                 continue;
             }
             array.add(Integer.parseInt(arrays[i]));
@@ -33,6 +36,7 @@ public class Category {
         algorithm();
         array.clear();
     }
+
     public void outPut(String string) {
         try {
             String c = string + " ";
@@ -46,43 +50,56 @@ public class Category {
         }
 
     }
-    public void outArrayPrint(){
+
+    public void scoreArrayPrint() {
         fileWrite.delete();
-        fileWrite = new File("E:\\Development\\java\\OOPSeminar_2016\\src\\chap01\\yahtzee\\yahtzeeOutput.txt");
+        fileWrite = new File("E:\\Development\\java\\OOPSeminar_2016\\src\\quiz\\yahtzee\\yahtzeeOutput.txt");
         System.out.println("-------------------------------------------------");
-        System.out.println(outArray);
+        System.out.println(scoreArray);
         System.out.println("-------------------------------------------------");
-        for(int i=0;i<outArray.size();i++){
-            out = out + outArray.get(i) +" ";
+        for (int i = 0; i < scoreArray.size(); i++) {
+            out = out + scoreArray.get(i) + " ";
         }
         out = out + "\r\n";
         outPut(out);
     }
+
     public void countReset() {
         minCount = 0;
         maxCount = 0;
     }
-    public void outArrayClear(){
+
+    public void totalArrayClear() {
+        totalArray.clear();
+    }
+
+    public void outArrayClear() {
         for (int i = 0; i < counter.length; i++) {
             outArray.set(i, 0);
         }
     }
+
     public void resultArrayClear() {
         for (int i = 0; i < counter.length; i++) {
             resultArray.set(i, 0);
         }
     }
-    public void counterInit(){
+
+    public void counterInit() {
         for (int i = 0; i < counter.length; i++) {
             counter[i] = 1;
         }
     }
+
     public void arrayInit() {
         for (int i = 0; i < counter.length; i++) {
             resultArray.add(0);
         }
-        for (int i = 0; i < counter.length+2; i++) {
+        for (int i = 0; i < counter.length + 2; i++) {
             outArray.add(0);
+        }
+        for (int i = 0; i < counter.length + 2; i++) {
+            scoreArray.add(0);
         }
         for (int i = 0; i < counter.length; i++) {
             counter[i] = 1;
@@ -130,19 +147,112 @@ public class Category {
             thirteenth();
         }
 
-        int max = Collections.max(resultArray);
-        if(max !=0){
-            int maxIndex = resultArray.indexOf(max);
-            outArray.set(maxIndex, max);
-            counter[maxIndex] = 0;
-        }
-        System.out.println(resultArray);
-        for(int i=0; i<counter.length;i++){
-            System.out.print(counter[i] + " ");
-        }
-        System.out.println();
+//        int max = Collections.max(resultArray);
+//        if(max !=0){
+//            int maxIndex = resultArray.indexOf(max);
+//            outArray.set(maxIndex, max);
+//            counter[maxIndex] = 0;
+//        }
+//        System.out.println(resultArray);
+//        for(int i=0; i<counter.length;i++){
+//            System.out.print(counter[i] + " ");
+//        }
+//        System.out.println();
 
+        Iterator<Integer> it = resultArray.iterator();
+        tmpArray = new ArrayList<>();
+        while (it.hasNext()) {
+            tmpArray.add(it.next());
+        }
+        totalArray.add(tmpArray);
         resultArrayClear();
+    }
+
+    public void selectScore() {
+        for (int a = 0; a < totalArray.size(); a++) {
+            outArray.set(0, (int) totalArray.get(0).get(a));
+            for (int b = 0; b < totalArray.size(); b++) {
+                if (b == a) {
+                    continue;
+                }
+                outArray.set(1, (int) totalArray.get(1).get(b));
+                for (int c = 0; c < totalArray.size(); c++) {
+                    if (c == a || c == b) {
+                        continue;
+                    }
+                    outArray.set(2, (int) totalArray.get(2).get(c));
+                    for (int d = 0; d < totalArray.size(); d++) {
+                        if (d == a || d == b || d == c) {
+                            continue;
+                        }
+                        outArray.set(3, (int) totalArray.get(3).get(d));
+                        for (int e = 0; e < totalArray.size(); e++) {
+                            if (e == a || e == b || e == c || e == d) {
+                                continue;
+                            }
+                            outArray.set(4, (int) totalArray.get(4).get(e));
+                            for (int f = 0; f < totalArray.size(); f++) {
+                                if (f == a || f == b || f == c || f == d || f == e) {
+                                    continue;
+                                }
+                                outArray.set(5, (int) totalArray.get(5).get(f));
+                                for (int g = 0; g < totalArray.size(); g++) {
+                                    if (g == a || g == b || g == c || g == d || g == e || g == f) {
+                                        continue;
+                                    }
+                                    outArray.set(6, (int) totalArray.get(6).get(g));
+                                    for (int h = 0; h < totalArray.size(); h++) {
+                                        if (h == a || h == b || h == c || h == d || h == e || h == f || h == g) {
+                                            continue;
+                                        }
+                                        outArray.set(7, (int) totalArray.get(7).get(h));
+                                        for (int i = 0; i < totalArray.size(); i++) {
+                                            if (i == a || i == b || i == c || i == d || i == e || i == f || i == g || i == h) {
+                                                continue;
+                                            }
+                                            outArray.set(8, (int) totalArray.get(8).get(i));
+                                            for (int j = 0; j < totalArray.size(); j++) {
+                                                if (j == a || j == b || j == c || j == d || j == e || j == f || j == g || j == h || j == i) {
+                                                    continue;
+                                                }
+                                                outArray.set(9, (int) totalArray.get(9).get(j));
+                                                for (int k = 0; k < totalArray.size(); k++) {
+                                                    if (k == a || k == b || k == c || k == d || k == e || k == f || k == g || k == h || k == i || k == j) {
+                                                        continue;
+                                                    }
+                                                    outArray.set(10, (int) totalArray.get(10).get(k));
+                                                    for (int l = 0; l < totalArray.size(); l++) {
+                                                        if (l == a || l == b || l == c || l == d || l == e || l == f || l == g || l == h || l == i || l == j || l == k) {
+                                                            continue;
+                                                        }
+                                                        outArray.set(11, (int) totalArray.get(11).get(l));
+                                                        for (int m = 0; m < totalArray.size(); m++) {
+                                                            if (m == a || m == b || m == c || m == d || m == e || m == f || m == g || m == h || m == i || m == j || m == k || m == l) {
+                                                                continue;
+                                                            }
+                                                            outArray.set(12, (int) totalArray.get(12).get(m));
+                                                            bonus();
+                                                            score();
+                                                            System.out.println(a+" "+b+" "+c+" "+d+" "+e+" "+f+" "+g+" "+h+" "+i+" "+j+" "+k+" "+l+" "+m);
+                                                            if (scoreArray.get(14) < outArray.get(14)) {
+                                                                for(int z=0; z<outArray.size(); z++){
+                                                                    scoreArray.set(z, outArray.get(z));
+                                                                }
+                                                                System.out.println(scoreArray);
+                                                            }
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public void first() {
@@ -341,25 +451,25 @@ public class Category {
     }
 
     public void bonus() {
-        int sum=0;
-        for(int i=0;i<6;i++){
+        int sum = 0;
+        for (int i = 0; i < 6; i++) {
             sum += outArray.get(i);
         }
-        if(sum>=63){
+        if (sum >= 63) {
             result = sum;
-            outArray.set(13,result);
-        }else{
+            outArray.set(13, result);
+        } else {
             result = 0;
-            outArray.set(13,result);
+            outArray.set(13, result);
         }
     }
 
     public void score() {
-        int scorePoint =0;
-        for(int i = 0; i<13;i++){
+        int scorePoint = 0;
+        for (int i = 0; i < 13; i++) {
             scorePoint += outArray.get(i);
         }
         result = scorePoint;
-        outArray.set(14,result);
+        outArray.set(14, result);
     }
 }

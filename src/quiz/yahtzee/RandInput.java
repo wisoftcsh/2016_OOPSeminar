@@ -6,14 +6,14 @@
 //    int game = 0;
 //    String randString = "";
 //    FileWriter fwr = null;
-//    File fileWriterand = new File("E:\\Development\\java\\OOPSeminar_2016\\src\\chap01\\yahtzee\\yahtzeeInput.txt");
+//    File fileWriterand = new File("E:\\Development\\java\\OOPSeminar_2016\\src\\quiz\\yahtzee\\yahtzeeInput.txt");
 //    RandInput(){
 //        removeFile();
 //        randString();
 //    }
 //    public void removeFile(){
 //        fileWriterand.delete();
-//        fileWriterand = new File("E:\\Development\\java\\OOPSeminar_2016\\src\\chap01\\yahtzee\\yahtzeeInput.txt");
+//        fileWriterand = new File("E:\\Development\\java\\OOPSeminar_2016\\src\\quiz\\yahtzee\\yahtzeeInput.txt");
 //    }
 //    public void RandomIn(String string) {
 //        try {

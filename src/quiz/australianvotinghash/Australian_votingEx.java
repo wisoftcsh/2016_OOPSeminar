@@ -1,4 +1,4 @@
-package chap01.australianvotinghash;
+package quiz.australianvotinghash;
 
 public class Australian_votingEx {
     public static void main(String[] args) {

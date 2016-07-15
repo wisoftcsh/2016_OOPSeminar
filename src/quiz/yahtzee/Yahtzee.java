@@ -1,4 +1,4 @@
-package chap01.yahtzee;
+package quiz.yahtzee;
 
 import java.io.*;
 import java.util.*;
@@ -10,7 +10,7 @@ public class Yahtzee {
     File file = null;
 
     Yahtzee() {
-        file = new File("E:\\Development\\java\\OOPSeminar_2016\\src\\chap01\\yahtzee\\yahtzeeInput.txt");
+        file = new File("E:\\Development\\java\\OOPSeminar_2016\\src\\quiz\\yahtzee\\yahtzeeInput.txt");
         Scanner fs = null;
         try {
             fs = new Scanner(new FileReader(file));
@@ -49,19 +49,25 @@ public class Yahtzee {
                 }
                 if(i%13==0){
                     if(i != 0){
-                        category.outArrayPrint();
+                        category.selectScore();
+                        System.out.println(category.scoreArray);
+                        category.scoreArrayPrint();
                     }
                     System.out.println("게임 시작");
+                    category.totalArrayClear();
                     category.outArrayClear();
                     category.counterInit();
                 }
                 String[] temp = yahtzeeArray.get(i).split(" ");
                 category.playing(temp);
                 loop++;
-                category.bonus();
-                category.score();
+//                category.bonus();
+//                category.score();
             }
-            category.outArrayPrint();
+//            category.outArrayPrint();
+            category.selectScore();
+            System.out.println(category.scoreArray);
+            category.scoreArrayPrint();
             break;
         }
 

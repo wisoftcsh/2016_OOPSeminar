@@ -1,4 +1,4 @@
-package chap01.australianvotinghash;
+package quiz.australianvotinghash;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -14,12 +14,12 @@ public class TextInOut {
     File file = null;
     FileWriter fw = null;
     Scanner scanner = null;
-    File fileWrite = new File("E:\\Development\\java\\OOPSeminar_2016\\src\\chap01\\australianvotinghash\\candidateOutput.txt");
+    File fileWrite = new File("E:\\Development\\java\\OOPSeminar_2016\\src\\quiz\\australianvotinghash\\candidateOutput.txt");
 
     TextInOut() {
     }
     public void Input() {
-        file = new File("E:\\Development\\java\\OOPSeminar_2016\\src\\chap01\\australianvotinghash\\candidateInput.txt");
+        file = new File("E:\\Development\\java\\OOPSeminar_2016\\src\\quiz\\australianvotinghash\\candidateInput.txt");
         String line;
         information = new ArrayList<>();
         try {

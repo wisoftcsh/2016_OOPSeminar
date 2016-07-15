@@ -1,4 +1,4 @@
-package chap01.yahtzee;
+package quiz.yahtzee;
 
 public class YahtzeeEx {
     public static void main(String[] args) {
