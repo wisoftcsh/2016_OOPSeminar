@@ -1,8 +1,10 @@
 package quiz.numbercounting;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class RandomArray {
+  Random random = new Random();
   ArrayList<Integer> randArray = new ArrayList<>();
   ArrayList<Integer> targetArray = new ArrayList<>();
   public void setRandN(int n){
@@ -10,7 +12,7 @@ public class RandomArray {
 
     }
     while(n > 0){
-      int number = (int) (Math.random()*10 + 1);
+      int number = random.nextInt(20);
       randArray.add(number);
       n--;
     }
@@ -19,10 +21,13 @@ public class RandomArray {
     if(m < 1 || m > 200000){
       System.out.println("숫자를 다시 입력해 주세요.");
     }
+
     while(m > 0){
-      int number = (int) (Math.random()*10 + 1);
-      targetArray.add(number);
-      m--;
+      int number = random.nextInt(20);
+      if(!targetArray.contains(number)){
+        targetArray.add(number);
+        m--;
+      }
     }
   }
 
