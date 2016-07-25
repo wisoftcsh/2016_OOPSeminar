@@ -60,9 +60,19 @@ public class Counting {
         int count = 0;
         while (targetIt.hasNext()) {
             int target = targetIt.next();
-            while (binarySearch(target)) {
-                count++;
+            int min = randomArray.randArray.get(0);
+            int max = randomArray.randArray.get(randomArray.randArray.size() - 1);
+            long startTime = System.currentTimeMillis();
+            if(target < min || target > max){
+                // nothing
+            }else{
+                while (binarySearch(target)) {
+                    count++;
+                }
             }
+            long endTime = System.currentTimeMillis();
+            long lTime = endTime - startTime;
+            System.out.println("TIME : " + lTime + "(ms)");
             if (count == 0) {
                 System.out.println("target : " + target + " 이(가) 배열에 존재하지 않습니다.");
             } else {

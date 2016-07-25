@@ -23,7 +23,7 @@ public class RandomArray {
     }
 
     while(m > 0){
-      int number = random.nextInt(20);
+      int number = random.nextInt(30);
       if(!targetArray.contains(number)){
         targetArray.add(number);
         m--;
