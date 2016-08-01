@@ -10,7 +10,7 @@ public class RandomArray {
 
   public void setRandN(int n) {
     while (n > 0) {
-      int number = random.nextInt(100);
+      int number = random.nextInt(50);
       randArray.add(number);
       n--;
     }
@@ -18,7 +18,7 @@ public class RandomArray {
 
   public void setRandM(int m) {
     while (m > 0) {
-      int number = random.nextInt(100);
+      int number = random.nextInt(50); // () 안의 숫자는 타겟 배열의 크기 와 일치해야한다. 중복 방지를 위해서
       if (!targetArray.contains(number)) {
         targetArray.add(number);
         m--;
