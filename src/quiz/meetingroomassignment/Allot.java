@@ -1,6 +1,8 @@
 package quiz.meetingroomassignment;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 
 public class Allot {
@@ -36,9 +38,24 @@ public class Allot {
         return count;
     }
 
+    public void prioritySort(){
+        Collections.sort(meetingArray.meetingArrayList, new Comparator<Meeting>(){
+            public int compare(Meeting obj1, Meeting obj2)
+            {
+                return (obj1.getEndTime() < obj2.getEndTime())
+                        ? -1 : (obj1.getEndTime() < obj2.getEndTime())
+                        ? 1 : (obj1.getDifference() > obj2.getDifference())
+                        ? -1: 1 ;
+            }
+        });
+    }
     public void allotTo() {
+        prioritySort();
+        for(int i = 0 ; i < meetingArray.meetingArrayList.size(); i++){
+            System.out.println(meetingArray.meetingArrayList.get(i).getEndTime());
+        }
         for(int i = 0 ; i< meetingArray.meetingArrayList.size();i++) {
-            tmpMeeting = meetingArray.meetingArrayList.get(i); // 어떤걸 선택할 것인지?
+            tmpMeeting = meetingArray.meetingArrayList.get(i);
             number = tmpMeeting.getNumber();
             start = tmpMeeting.getStartTime();
             end = tmpMeeting.getEndTime();
