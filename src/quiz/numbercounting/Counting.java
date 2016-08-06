@@ -2,15 +2,17 @@ package quiz.numbercounting;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
 
 public class Counting {
   RandomArray randomArray = new RandomArray();
   ArraySort arraySort = new ArraySort();
-  ArrayList<Integer> tmp = new ArrayList<>();
+  List<Integer> tmp = new ArrayList<>();
   private int n = 0;
   private int m = 0;
   private int count = 0;
+  private int caseNumber = 0; // 처음 배열 수정할때 사용하는 번호
 
   Counting() {
     numberInit();
@@ -48,9 +50,9 @@ public class Counting {
         count++;
         while (true) { // 주변 탐색
           if ((addMid >= randomArray.randArray.size() && decMid < 0) ||
-                  (addMid >= randomArray.randArray.size() && randomArray.randArray.get(decMid) != target) ||
-                  (randomArray.randArray.get(addMid) != target && decMid < 0) ||
-                  (randomArray.randArray.get(addMid) != target && randomArray.randArray.get(decMid) != target)) {
+              (addMid >= randomArray.randArray.size() && randomArray.randArray.get(decMid) != target) ||
+              (randomArray.randArray.get(addMid) != target && decMid < 0) ||
+              (randomArray.randArray.get(addMid) != target && randomArray.randArray.get(decMid) != target)) {
             break; // 탈출 조건
           }
           if (addMid < randomArray.randArray.size() && randomArray.randArray.get(addMid) == target) {
@@ -84,9 +86,9 @@ public class Counting {
         count++;
         while (true) { // 주변 탐색
           if ((addMid >= tmp.size() && decMid < 0) ||
-                  (addMid >= tmp.size() && tmp.get(decMid) != target) ||
-                  (tmp.get(addMid) != target && decMid < 0) ||
-                  (tmp.get(addMid) != target && tmp.get(decMid) != target)) {
+              (addMid >= tmp.size() && tmp.get(decMid) != target) ||
+              (tmp.get(addMid) != target && decMid < 0) ||
+              (tmp.get(addMid) != target && tmp.get(decMid) != target)) {
             break; // 탈출 조건
           }
           if (addMid < tmp.size() && tmp.get(addMid) == target) {
@@ -98,10 +100,7 @@ public class Counting {
             decMid--;
           }
         }
-        addMid = addMid - 1; // 포인터 이동 ( 타겟으로 )
-        while (addMid >= 0) {
-          tmp.remove(addMid--);
-        }
+        tmp.subList(addMid, tmp.size());
         return true;
       } else {
         if (target < tmp.get(mid))
@@ -111,6 +110,66 @@ public class Counting {
       }
     }
     return false;
+  }
+
+  public int basicBinarySearch(int target) { //초기 배열 설정을 위한 이진탐색
+    int first = 0;
+    int last = randomArray.randArray.size() - 1;  // 0 ~ n까지
+    while (first <= last) {
+      int mid = (first + last) / 2;
+//      System.out.println(mid + " " + first + " " + last);
+      if (randomArray.randArray.get(mid) == target) { // 발견이 된 경우
+        while (mid + 1 < randomArray.randArray.size() && mid - 1 >= 0) {
+          if (caseNumber == 0) {
+            if (randomArray.randArray.get(mid - 1) == target) {
+              mid--;
+            } else {
+              break;
+            }
+          } else if (caseNumber == 1) {
+            if (randomArray.randArray.get(mid + 1) == target) {
+              mid++;
+            } else {
+              break;
+            }
+          }
+        }
+        return mid;
+      } else {
+        if (target < randomArray.randArray.get(mid))
+          last = mid - 1;
+        else
+          first = mid + 1;
+      }
+    }
+    //발견하지 못한 경우 인덱스를 어떻게 추출할까>/
+    first = 0;
+    last = randomArray.randArray.size() - 1;  // 0 ~ n까지
+    while (first <= last) {
+      System.out.println("발견 못함, 근사값 설정");
+      int mid = (first + last) / 2;
+      if (first == last && last == mid) {
+        break;
+      }
+      if (mid + 1 < randomArray.randArray.size() && mid - 1 >= 0) {
+        if (randomArray.randArray.get(mid) < target && randomArray.randArray.get(mid + 1) > target) {
+          return mid + 1;
+        } else if (randomArray.randArray.get(mid) > target && randomArray.randArray.get(mid - 1) < target) {
+          return mid;
+        } else {
+          if (target < randomArray.randArray.get(mid))
+            last = mid - 1;
+          else
+            first = mid + 1;
+        }
+      }
+    }
+    if (randomArray.randArray.get(randomArray.randArray.size() - 1) < target) {
+      return randomArray.randArray.size() - 1;
+    } else if (randomArray.randArray.get(0) > target) {
+      return 0;
+    }
+    return -1;
   }
 
   public void targetSearch(Iterator<Integer> targetIt) {
@@ -144,18 +203,18 @@ public class Counting {
       }
       if (count == 0) {
         System.out.println("target : " + target + " 이(가) 배열에 존재하지 않습니다.");
-        while (true) {  // 존재 하지 않으면 target 이하의 수는 제거
-          if (tmp.size() == 0 || tmp.get(0) >= target) {
-            break;
-          } else {
-            tmp.remove(0);
-          }
-        }
       } else {
         System.out.println("target : " + target + " 이(가) 배열에 " + count + " 만큼 존재합니다.");
       }
+      while (true) { // 탐색 후 제거
+        if (tmp.size() == 0 || tmp.get(0) > target) {
+          break;
+        } else {
+          tmp.remove(0);
+        }
+      }
       count = 0;
-//      System.out.println(tmp); //시간 비교시에는주석처리 해야함
+      System.out.println(tmp); //시간 비교시에는주석처리 해야함
     }
   }
 
@@ -175,18 +234,11 @@ public class Counting {
     tmp.addAll(randomArray.randArray); //깊은 복사
     int targetMax = randomArray.targetArray.get(randomArray.targetArray.size() - 1);
     int targetMin = randomArray.targetArray.get(0);
-    while (true) { // 초기에 배열 정리
-      if (tmp.size() == 0) {
-        break;
-      }
-      if (tmp.get(0) < targetMin) {
-        tmp.remove(0);
-      } else if (tmp.get(tmp.size() - 1) > targetMax) {
-        tmp.remove(tmp.size() - 1);
-      } else if (tmp.get(0) >= targetMin && tmp.get(tmp.size() - 1) <= targetMax) {
-        break;
-      }
-    }
+    caseNumber = 0;
+    int minSearch = basicBinarySearch(targetMin);
+    caseNumber = 1;
+    int maxSearch = basicBinarySearch(targetMax);
+    tmp = tmp.subList(minSearch, maxSearch);
     System.out.println("------------------------- 수정된 tmp --------------------------");
     System.out.println(tmp);
     System.out.println("---------------------------------------------------------------");
